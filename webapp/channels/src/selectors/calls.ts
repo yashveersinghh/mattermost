@@ -10,7 +10,7 @@ import type {ClientLicense} from '@mattermost/types/config';
 import {createSelector} from 'mattermost-redux/selectors/create_selector';
 
 import {Constants, suitePluginIds} from 'utils/constants';
-import {isMinimumEnterpriseLicense} from 'utils/license_utils';
+import {isMinimumProfessionalLicense} from 'utils/license_utils';
 
 import type {GlobalState} from 'types/store';
 
@@ -69,7 +69,7 @@ export function shouldShowCallsInChannel(license: ClientLicense, channelType?: C
     if (channelType === Constants.DM_CHANNEL) {
         return true;
     }
-    return isMinimumEnterpriseLicense(license);
+    return isMinimumProfessionalLicense(license);
 }
 
 export function filterCallsPluginComponents<T extends {pluginId: string}>(

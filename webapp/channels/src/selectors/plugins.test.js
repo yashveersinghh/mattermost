@@ -1,8 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {getCallButtonPluginComponents, getChannelHeaderMenuPluginComponents, getChannelMobileHeaderPluginButtons, getPluginUserSettings} from 'selectors/plugins';
-
+import {getCallButtonPluginComponents, getChannelHeaderMenuPluginComponents, getChannelMobileHeaderPluginButtons, getPluginUserSettings, getChannelHeaderPluginComponents, shouldShowCallsInChannel} from 'selectors/plugins';
 import {Constants, LicenseSkus, suitePluginIds} from 'utils/constants';
 
 describe('selectors/plugins', () => {
@@ -389,9 +388,27 @@ describe('selectors/plugins', () => {
             expect(components).toEqual([]);
         });
 
-        test('filters calls button components on unlicensed non-DM channels', () => {
-            const components = getCallButtonPluginComponents(baseState);
-            expect(components).toEqual([]);
+        test('filters calls channel header components on unlicensed non-DM channels', () => {
+            const components = getChannelHeaderPluginComponents(baseState);
+            expect(components.filter(c => c.pluginId === suitePluginIds.calls)).toEqual([]);
+        });
+
+        test('keeps calls UI on professional licensed servers', () => {
+            const proState = {
+                ...baseState,
+                entities: {
+                    ...baseState.entities,
+                    general: {
+                        ...baseState.entities.general,
+                        license: {
+                            IsLicensed: 'true',
+                            SkuShortName: 'professional',
+                        },
+                    },
+                },
+            };
+            expect(getChannelHeaderMenuPluginComponents(proState)).toEqual([callsComponent, otherComponent]);
+            expect(getCallButtonPluginComponents(proState)).toEqual([callsComponent]);
         });
     });
 });
