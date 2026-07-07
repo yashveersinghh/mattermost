@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import {getCallButtonPluginComponents, getChannelHeaderMenuPluginComponents, getChannelMobileHeaderPluginButtons, getPluginUserSettings, getChannelHeaderPluginComponents, shouldShowCallsInChannel} from 'selectors/plugins';
+import {getCallButtonPluginComponents, getChannelHeaderMenuPluginComponents, getChannelMobileHeaderPluginButtons, getPluginUserSettings, getChannelHeaderPluginComponents} from 'selectors/plugins';
+
 import {Constants, LicenseSkus, suitePluginIds} from 'utils/constants';
 
 describe('selectors/plugins', () => {
@@ -390,7 +391,7 @@ describe('selectors/plugins', () => {
 
         test('filters calls channel header components on unlicensed non-DM channels', () => {
             const components = getChannelHeaderPluginComponents(baseState);
-            expect(components.filter(c => c.pluginId === suitePluginIds.calls)).toEqual([]);
+            expect(components.filter((c) => c.pluginId === suitePluginIds.calls)).toEqual([]);
         });
 
         test('keeps calls UI on professional licensed servers', () => {
