@@ -72,4 +72,32 @@ test.describe('Mobile view RHS auto-focus', () => {
         // * Verify the mobile RHS search input is focused
         await expect(page.locator('#sbrSearchBox')).toBeFocused();
     });
+
+    /**
+     * @objective Tapping the mobile menu backdrop should dismiss/close the modal
+     */
+    test('closes mobile menu when clicking the backdrop layer', {tag: '@mobile'}, async ({pw, page}) => {
+        const {user} = await pw.initSetup();
+
+        // # Log in as the test user and navigate to channels page
+        const {channelsPage} = await pw.testBrowser.login(user);
+        await channelsPage.goto();
+        await channelsPage.toBeVisible();
+
+        // # Open the mobile menu by clicking the channel header dropdown button
+        await page.locator('#sidebarHeaderDropdownButton').click();
+
+        // # Define the mobile menu modal locator
+        const menuModal = page.locator('.modal-dialog.menuModal');
+        
+        // * Verify the menu modal is visible after the click
+        await expect(menuModal).toBeVisible();
+
+        // # Click the backdrop area to close it (without forcing, to verify actionability)
+        const modalBackdrop = page.locator('.modal-backdrop');
+        await modalBackdrop.click({position: {x: 10, y: 10}});
+
+        // * Verify the mobile menu modal is now successfully dismissed/hidden
+        await expect(menuModal).toBeHidden();
+    });
 });
