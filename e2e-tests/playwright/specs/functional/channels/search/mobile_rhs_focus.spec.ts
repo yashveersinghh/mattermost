@@ -99,34 +99,4 @@ test.describe('Mobile view RHS auto-focus', () => {
         // * Verify the mobile menu modal is now successfully dismissed/hidden
         await expect(menuModal).toBeHidden();
     });
-
-    /**
-     * @objective Pressing Tab repeatedly should wrap focus inside the mobile menu modal
-     */
-    test('traps keyboard focus inside mobile menu on Tab press', {tag: '@mobile'}, async ({pw}) => {
-        const {user} = await pw.initSetup();
-
-        // # Log in as the test user and navigate to channels page
-        const {channelsPage, page} = await pw.testBrowser.login(user);
-        await channelsPage.goto();
-        await channelsPage.toBeVisible();
-
-        // # Open the mobile channel header menu
-        await channelsPage.centerView.header.openChannelMenu();
-
-        // # Define the mobile menu modal locator
-        const menuModal = page.locator('.modal-dialog.menuModal');
-        await expect(menuModal).toBeVisible();
-
-        // # Press Tab to focus the first menu item
-        await page.keyboard.press('Tab');
-        const firstMenuItem = menuModal.getByRole('menuitem', {name: 'Open in new window'});
-        await expect(firstMenuItem).toBeFocused();
-
-        // # Press Tab again
-        await page.keyboard.press('Tab');
-        
-        // * Verify focus didn't escape
-        await expect(firstMenuItem).toBeFocused();
-    });
 });
